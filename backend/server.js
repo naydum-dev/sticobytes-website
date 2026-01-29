@@ -1,28 +1,65 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import morgan from "morgan";
 import pool, { query } from "./config/database.js";
+import testRoutes from "./routes/testRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ============================================
+// MIDDLEWARE CONFIGURATION
+// ============================================
+
+// 1. Security middleware - adds security headers
+app.use(helmet());
+
+// 2. Request logging - logs all HTTP requests
+app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
+
+// 3. CORS - allow frontend to communicate with backend
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
   }),
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// 4. Body parsing middleware
+app.use(express.json({ limit: "10mb" })); // Parse JSON with 10MB limit
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// 5. Request timestamp middleware (custom)
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
+// ============================================
+// ROUTES
+// ============================================
+
+// Health check route
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Sticobytes API is running",
+    version: "1.0.0",
+    timestamp: req.requestTime,
+  });
+});
 
 // Test route
 app.get("/api/test", (req, res) => {
   res.json({
     message: "Backend server is running!",
-    timestamp: new Date().toISOString(),
+    timestamp: req.requestTime,
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
@@ -75,27 +112,44 @@ app.get("/api/db-tables", async (req, res) => {
   }
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+// ============================================
+// API ROUTES
+// ============================================
 
-// Error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: "Something went wrong!",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
-  });
-});
+// Test routes
+app.use("/api/test", testRoutes);
 
-// Start server
+// Future routes (uncomment as you create them)
+// app.use('/api/auth', authRoutes);
+// app.use('/api/blog', blogRoutes);
+// app.use('/api/services', serviceRoutes);
+// app.use('/api/gadgets', gadgetRoutes);
+// app.use('/api/team', teamRoutes);
+// app.use('/api/newsletter', newsletterRoutes);
+// ============================================
+// ERROR HANDLING MIDDLEWARE
+// ============================================
+
+// 404 handler - must be after all routes
+app.use(notFound);
+
+// Global error handler - must be last
+app.use(errorHandler);
+
+// ============================================
+// START SERVER
+// ============================================
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
 });
 
-// Graceful shutdown
+// ============================================
+// GRACEFUL SHUTDOWN
+// ============================================
+
 process.on("SIGTERM", async () => {
   console.log("SIGTERM received, closing server...");
   await pool.end();
