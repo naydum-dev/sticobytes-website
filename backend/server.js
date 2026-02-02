@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import pool, { query } from "./config/database.js";
 import testRoutes from "./routes/testRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -120,7 +121,10 @@ app.get("/api/db-tables", async (req, res) => {
 app.use("/api/test", testRoutes);
 
 // Future routes (uncomment as you create them)
-// app.use('/api/auth', authRoutes);
+
+// Auth routes
+app.use("/api/auth", authRoutes);
+
 // app.use('/api/blog', blogRoutes);
 // app.use('/api/services', serviceRoutes);
 // app.use('/api/gadgets', gadgetRoutes);
