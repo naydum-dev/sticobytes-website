@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,32 +15,60 @@ function Navbar() {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-blue-600">
-              Sticobytes
+            <Link to="/" className="flex items-center space-x-2 group">
+              <img
+                src={logo}
+                alt="Sticobytes Logo"
+                className="h-10 w-auto transition-transform group-hover:scale-105"
+              />
+              <span className="text-2xl font-bold text-primary-600 group-hover:text-primary-700 transition-colors">
+                Sticobytes
+              </span>
             </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Home
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/about"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               About
             </Link>
-            <Link to="/services" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/services"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Services
             </Link>
-            <Link to="/blog" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/blog"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Blog
             </Link>
-            <Link to="/gadgets" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/gadgets"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Gadgets
             </Link>
-            <Link to="/team" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/team"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Team
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/contact"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
               Contact
             </Link>
           </div>
@@ -48,7 +77,7 @@ function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none"
+              className="text-gray-700 hover:text-primary-600 focus:outline-none transition-colors"
             >
               <svg
                 className="h-6 w-6"
@@ -76,49 +105,49 @@ function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
             <Link
               to="/"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Home
             </Link>
             <Link
               to="/about"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               About
             </Link>
             <Link
               to="/services"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Services
             </Link>
             <Link
               to="/blog"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Blog
             </Link>
             <Link
               to="/gadgets"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Gadgets
             </Link>
             <Link
               to="/team"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Team
             </Link>
             <Link
               to="/contact"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
               onClick={toggleMenu}
             >
               Contact

@@ -6,6 +6,7 @@ import morgan from "morgan";
 import pool, { query } from "./config/database.js";
 import testRoutes from "./routes/testRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -125,8 +126,10 @@ app.use("/api/test", testRoutes);
 // Auth routes
 app.use("/api/auth", authRoutes);
 
+//Service routes
+app.use("/api/services", serviceRoutes);
+
 // app.use('/api/blog', blogRoutes);
-// app.use('/api/services', serviceRoutes);
 // app.use('/api/gadgets', gadgetRoutes);
 // app.use('/api/team', teamRoutes);
 // app.use('/api/newsletter', newsletterRoutes);
