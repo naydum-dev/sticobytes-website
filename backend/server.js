@@ -7,6 +7,7 @@ import pool, { query } from "./config/database.js";
 import testRoutes from "./routes/testRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
+import teamRoutes from "./routes/teamRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -129,9 +130,11 @@ app.use("/api/auth", authRoutes);
 //Service routes
 app.use("/api/services", serviceRoutes);
 
+// Team routes
+app.use("/api/team", teamRoutes);
+
 // app.use('/api/blog', blogRoutes);
 // app.use('/api/gadgets', gadgetRoutes);
-// app.use('/api/team', teamRoutes);
 // app.use('/api/newsletter', newsletterRoutes);
 // ============================================
 // ERROR HANDLING MIDDLEWARE
