@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import pool, { query } from "./config/database.js";
 import testRoutes from "./routes/testRoutes.js";
+import gadgetRoutes from "./routes/gadgetRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
@@ -133,8 +134,11 @@ app.use("/api/services", serviceRoutes);
 // Team routes
 app.use("/api/team", teamRoutes);
 
+//Gadget routes
+app.use("/api/gadgets", gadgetRoutes);
+
 // app.use('/api/blog', blogRoutes);
-// app.use('/api/gadgets', gadgetRoutes);
+
 // app.use('/api/newsletter', newsletterRoutes);
 // ============================================
 // ERROR HANDLING MIDDLEWARE
