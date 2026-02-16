@@ -8,6 +8,8 @@ import testRoutes from "./routes/testRoutes.js";
 import gadgetRoutes from "./routes/gadgetRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
+import blogRoutes from "./routes/blogRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
@@ -137,7 +139,11 @@ app.use("/api/team", teamRoutes);
 //Gadget routes
 app.use("/api/gadgets", gadgetRoutes);
 
-// app.use('/api/blog', blogRoutes);
+//Blog routes
+app.use("/api/blog", blogRoutes);
+
+//Upload routes
+app.use("/api/upload", uploadRoutes);
 
 // app.use('/api/newsletter', newsletterRoutes);
 // ============================================
