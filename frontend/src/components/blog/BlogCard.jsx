@@ -1,37 +1,34 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import Badge from "../common/Badge";
+import { formatDate, formatViews } from "../../services/blogApi";
 
-const BlogCard = ({
-  slug,
-  title,
-  excerpt,
-  featuredImage,
-  category,
-  date,
-  readTime,
-  author,
-}) => {
-  // Format date to readable format
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  };
+const BlogCard = ({ post }) => {
+  const {
+    slug,
+    title,
+    excerpt,
+    featured_image,
+    category_name,
+    published_at,
+    reading_time,
+    views,
+  } = post;
 
   return (
-    <article className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-      {/* Featured Image */}
-      <div className="relative h-48 overflow-hidden bg-gray-200">
-        {featuredImage ? (
+    <article className="bg-white rounded-xl shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden group">
+      <Link
+        to={`/blog/${slug}`}
+        className="block overflow-hidden relative h-52 bg-gradient-to-br from-primary-100 to-primary-200 flex-shrink-0"
+      >
+        {featured_image ? (
           <img
-            src={featuredImage}
+            src={featured_image}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary-200 to-navy-200 flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center">
             <svg
-              className="w-16 h-16 text-white/50"
+              className="w-16 h-16 text-primary-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -39,60 +36,54 @@ const BlogCard = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                strokeWidth={1.5}
+                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 12h6m-6-4h.01"
               />
             </svg>
           </div>
         )}
-
-        {/* Category Badge */}
-        {category && (
-          <div className="absolute top-4 left-4">
-            <Badge variant="primarySolid" size="sm" rounded="full">
-              {category}
-            </Badge>
-          </div>
+        {category_name && (
+          <span className="absolute top-3 left-3 bg-primary-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            {category_name}
+          </span>
         )}
-      </div>
+      </Link>
 
-      {/* Content */}
-      <div className="p-6">
-        {/* Title */}
+      <div className="flex flex-col flex-grow p-5">
         <Link to={`/blog/${slug}`}>
-          <h3 className="text-xl font-heading font-bold text-navy-500 mb-3 line-clamp-2 group-hover:text-primary-500 transition-colors duration-200">
+          <h3 className="font-heading font-bold text-navy-900 text-lg leading-snug mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors duration-200">
             {title}
           </h3>
         </Link>
 
-        {/* Excerpt */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">{excerpt}</p>
+        {excerpt && (
+          <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-4 flex-grow">
+            {excerpt}
+          </p>
+        )}
 
-        {/* Meta Information */}
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-          <div className="flex items-center gap-4">
-            {date && (
+        <div className="flex items-center justify-between text-xs text-gray-400 mt-auto pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1">
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              {formatDate(published_at)}
+            </span>
+            {reading_time && (
               <span className="flex items-center gap-1">
                 <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                {formatDate(date)}
-              </span>
-            )}
-            {readTime && (
-              <span className="flex items-center gap-1">
-                <svg
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -104,20 +95,41 @@ const BlogCard = ({
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                {readTime} min read
+                {reading_time} min read
               </span>
             )}
           </div>
+          <span className="flex items-center gap-1">
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            {formatViews(views)}
+          </span>
         </div>
 
-        {/* Read More Link */}
         <Link
           to={`/blog/${slug}`}
-          className="inline-flex items-center gap-2 text-primary-500 font-medium text-sm hover:gap-3 transition-all duration-200"
+          className="mt-4 inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 font-semibold text-sm transition-colors duration-200 group/link"
         >
           Read More
           <svg
-            className="w-4 h-4"
+            className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-200"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
