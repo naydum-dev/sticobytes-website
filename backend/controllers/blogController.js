@@ -452,3 +452,75 @@ export const getAllCategories = async (req, res) => {
     });
   }
 };
+
+// @desc    Get ALL posts including drafts (admin only)
+// @route   GET /api/blog/all
+// @access  Private (Admin)
+export const getAllPostsAdmin = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        bp.id, bp.title, bp.slug, bp.excerpt, bp.featured_image,
+        bp.status, bp.views, bp.reading_time, bp.created_at, bp.published_at,
+        c.name as category_name, c.slug as category_slug
+      FROM blog_posts bp
+      LEFT JOIN categories c ON bp.category_id = c.id
+      ORDER BY bp.created_at DESC
+    `;
+
+    const result = await pool.query(query);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        posts: result.rows,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching all posts for admin:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch posts",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get single post by ID (admin only)
+// @route   GET /api/blog/post/:id
+// @access  Private (Admin)
+export const getPostById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = `
+      SELECT 
+        bp.*, 
+        c.name as category_name, c.slug as category_slug,
+        COALESCE(
+          json_agg(
+            DISTINCT jsonb_build_object('id', t.id, 'name', t.name, 'slug', t.slug)
+          ) FILTER (WHERE t.id IS NOT NULL), '[]'
+        ) as tags
+      FROM blog_posts bp
+      LEFT JOIN categories c ON bp.category_id = c.id
+      LEFT JOIN post_tags pt ON bp.id = pt.post_id
+      LEFT JOIN tags t ON pt.tag_id = t.id
+      WHERE bp.id = $1
+      GROUP BY bp.id, c.name, c.slug
+    `;
+
+    const result = await pool.query(query, [id]);
+
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+    }
+
+    res.status(200).json({ success: true, data: result.rows[0] });
+  } catch (error) {
+    console.error("Error fetching post by ID:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch post" });
+  }
+};

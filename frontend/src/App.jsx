@@ -1,8 +1,9 @@
+// frontend/src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
-// Import pages
+// Public pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -11,7 +12,12 @@ import BlogPost from "./pages/BlogPost";
 import Gadgets from "./pages/Gadgets";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
+
+// Admin pages
+import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
+import CreatePost from "./pages/admin/CreatePost";
+import EditPost from "./pages/admin/EditPost";
 
 function App() {
   return (
@@ -29,12 +35,34 @@ function App() {
           <Route path="contact" element={<Contact />} />
         </Route>
 
+        {/* Admin Login - Public */}
+        <Route path="/admin/login" element={<Login />} />
+
         {/* Admin Routes - Protected */}
+
         <Route
           path="/admin/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/posts/create"
+          element={
+            <ProtectedRoute>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/posts/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditPost />
             </ProtectedRoute>
           }
         />
