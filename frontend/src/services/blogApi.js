@@ -29,6 +29,21 @@ export const getCategories = async () => {
   return response.data;
 };
 
+// Get related posts by category (exclude current post)
+export const getRelatedPosts = async (category, excludeSlug) => {
+  const params = new URLSearchParams();
+  params.append("page", 1);
+  params.append("limit", 3);
+  if (category) params.append("category", category);
+
+  const response = await axios.get(`${API_URL}/blog?${params.toString()}`);
+
+  const filtered = response.data.data.filter(
+    (post) => post.slug !== excludeSlug,
+  );
+  return filtered.slice(0, 3);
+};
+
 // Format date nicely: "February 17, 2026"
 export const formatDate = (dateString) => {
   if (!dateString) return "";
