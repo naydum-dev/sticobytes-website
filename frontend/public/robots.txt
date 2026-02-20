@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow admin pages from being indexed
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/dashboard
+Disallow: /admin/posts/
+
+# Sitemap location
+Sitemap: https://sticobytes.com/sitemap.xml

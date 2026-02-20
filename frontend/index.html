@@ -14,6 +14,48 @@
     />
 
     <title>frontend</title>
+
+    <!-- Structured Data - Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sticobytes",
+        "url": "https://sticobytes.com",
+        "logo": "https://sticobytes.com/logo.png",
+        "description": "Sticobytes is a digital agency in Umuahia, Abia State, Nigeria offering web development, graphics design, business branding, digital literacy training, and gadget sales.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Ezenobizi Umuopara",
+          "addressLocality": "Umuahia",
+          "addressRegion": "Abia State",
+          "addressCountry": "NG"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+234-811-339-3564",
+          "contactType": "customer service",
+          "availableLanguage": "English"
+        },
+        "sameAs": []
+      }
+    </script>
+
+    <!-- Structured Data - Website -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Sticobytes",
+        "url": "https://sticobytes.com",
+        "description": "Digital agency and gadget store in Umuahia, Abia State, Nigeria.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sticobytes.com/blog?search={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

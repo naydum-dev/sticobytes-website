@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { getAllServices, createWhatsAppLink } from "../services/serviceApi";
 import Button from "../components/common/Button";
 import Card from "../components/common/Card";
@@ -153,7 +154,6 @@ const Services = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Fetch services on component mount
   useEffect(() => {
     fetchServices();
   }, []);
@@ -172,19 +172,16 @@ const Services = () => {
     }
   };
 
-  // Get unique categories
   const categories = [
     "All",
     ...new Set(services.map((service) => service.category)),
   ];
 
-  // Filter services by category
   const filteredServices =
     selectedCategory === "All"
       ? services
       : services.filter((service) => service.category === selectedCategory);
 
-  // Get icon component
   const getIcon = (iconName) => {
     const IconComponent = ServiceIcons[iconName] || ServiceIcons.code;
     return <IconComponent />;
@@ -192,6 +189,43 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Our Services | Sticobytes Digital Agency Umuahia, Nigeria</title>
+        <meta
+          name="description"
+          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Abia State, Nigeria."
+        />
+        <meta
+          name="keywords"
+          content="web development Nigeria, graphics design Umuahia, business branding Abia State, React training Nigeria, SQL training, digital literacy, computer training Umuahia"
+        />
+        <link rel="canonical" href="https://sticobytes.com/services" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Our Services | Sticobytes Digital Agency Umuahia, Nigeria"
+        />
+        <meta
+          property="og:description"
+          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Nigeria."
+        />
+        <meta property="og:url" content="https://sticobytes.com/services" />
+        <meta property="og:site_name" content="Sticobytes" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Our Services | Sticobytes Digital Agency Umuahia, Nigeria"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Nigeria."
+        />
+      </Helmet>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-navy-600 to-primary-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

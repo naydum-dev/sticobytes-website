@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import Hero from "../components/sections/Hero";
 import LatestBlogs from "../components/sections/LatestBlogs";
 import Newsletter from "../components/sections/Newsletter";
@@ -10,6 +11,45 @@ import Badge from "../components/common/Badge";
 const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>
+          Sticobytes | Digital Agency & Gadget Store in Umuahia, Nigeria
+        </title>
+        <meta
+          name="description"
+          content="Sticobytes is a digital agency in Umuahia, Abia State, Nigeria offering web development, graphics design, business branding, digital literacy training, and gadget sales."
+        />
+        <meta
+          name="keywords"
+          content="digital agency Nigeria, web development Umuahia, graphics design Abia State, business branding Nigeria, React training, SQL training, digital literacy, gadgets Nigeria, buy gadgets Umuahia"
+        />
+        <link rel="canonical" href="https://sticobytes.com" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Sticobytes | Digital Agency & Gadget Store in Umuahia, Nigeria"
+        />
+        <meta
+          property="og:description"
+          content="Sticobytes is a digital agency in Umuahia, Abia State, Nigeria offering web development, graphics design, business branding, digital literacy training, and gadget sales."
+        />
+        <meta property="og:url" content="https://sticobytes.com" />
+        <meta property="og:site_name" content="Sticobytes" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Sticobytes | Digital Agency & Gadget Store in Umuahia, Nigeria"
+        />
+        <meta
+          name="twitter:description"
+          content="Sticobytes is a digital agency in Umuahia, Abia State, Nigeria offering web development, graphics design, business branding, digital literacy training, and gadget sales."
+        />
+      </Helmet>
+
       {/* Hero Section */}
       <Hero />
 
