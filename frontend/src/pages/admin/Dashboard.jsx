@@ -13,6 +13,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteId, setDeleteId] = useState(null);
+  const [subscribers, setSubscribers] = useState([]);
+  const [showSubscribers, setShowSubscribers] = useState(false);
+  const [subscribersLoading, setSubscribersLoading] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     published: 0,
@@ -34,7 +37,6 @@ const Dashboard = () => {
       const allPosts = response.data.data?.posts || response.data.posts || [];
       setPosts(allPosts);
 
-      // Calculate stats
       setStats({
         total: allPosts.length,
         published: allPosts.filter((p) => p.status === "published").length,
@@ -46,6 +48,21 @@ const Dashboard = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSubscribers = async () => {
+    setSubscribersLoading(true);
+    setShowSubscribers(true);
+    try {
+      const response = await axios.get(`${API_URL}/newsletter/subscribers`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSubscribers(response.data.subscribers);
+    } catch (error) {
+      console.error("Failed to fetch subscribers:", error);
+    } finally {
+      setSubscribersLoading(false);
     }
   };
 
@@ -310,7 +327,104 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+
+        {/* Newsletter Subscribers — INSIDE the main container */}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-900">
+              Newsletter Subscribers
+            </h2>
+            <button
+              onClick={fetchSubscribers}
+              className="px-4 py-2 rounded-lg text-white text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#009ad9" }}
+            >
+              {showSubscribers ? "Refresh" : "View Subscribers"}
+            </button>
+          </div>
+
+          {showSubscribers && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              {subscribersLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div
+                    className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+                    style={{
+                      borderColor: "#009ad9",
+                      borderTopColor: "transparent",
+                    }}
+                  ></div>
+                </div>
+              ) : subscribers.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-4xl mb-3">📧</p>
+                  <p className="text-gray-500">No subscribers yet</p>
+                </div>
+              ) : (
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        #
+                      </th>
+                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Subscribed
+                      </th>
+                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {subscribers.map((sub, index) => (
+                      <tr key={sub.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          {index + 1}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          {sub.email}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          {formatDate(sub.subscribed_at)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              sub.is_active
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {sub.is_active ? "Active" : "Unsubscribed"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="bg-gray-50 border-t border-gray-100">
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="px-6 py-3 text-sm text-gray-500"
+                      >
+                        Total:{" "}
+                        <span className="font-semibold text-gray-900">
+                          {subscribers.length}
+                        </span>{" "}
+                        subscribers
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+      {/* END main container */}
 
       {/* Delete Confirmation Modal */}
       {deleteId && (

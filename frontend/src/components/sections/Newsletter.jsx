@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import { subscribe } from "../../services/newsletterApi.js";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email) {
@@ -25,22 +25,25 @@ const Newsletter = () => {
       return;
     }
 
-    // Simulate API call (later we'll connect to backend)
     setStatus("loading");
 
-    setTimeout(() => {
+    try {
+      const data = await subscribe(email);
       setStatus("success");
-      setMessage(
-        "Thank you for subscribing! Check your inbox for confirmation.",
-      );
+      setMessage(data.message);
       setEmail("");
 
-      // Reset success message after 5 seconds
       setTimeout(() => {
         setStatus("idle");
         setMessage("");
       }, 5000);
-    }, 1500);
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error.response?.data?.error ||
+          "Something went wrong. Please try again.",
+      );
+    }
   };
 
   return (

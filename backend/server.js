@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import newsletterRoutes from "./routes/newsletterRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
@@ -145,7 +146,9 @@ app.use("/api/blog", blogRoutes);
 //Upload routes
 app.use("/api/upload", uploadRoutes);
 
-// app.use('/api/newsletter', newsletterRoutes);
+//Newsletter Routes
+app.use("/api/newsletter", newsletterRoutes);
+
 // ============================================
 // ERROR HANDLING MIDDLEWARE
 // ============================================
