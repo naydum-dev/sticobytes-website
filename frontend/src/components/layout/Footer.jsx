@@ -78,7 +78,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://wa.me/2348012345678"
+                href="https://wa.me/2348113393564"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 hover:bg-success rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -242,24 +242,10 @@ const Footer = () => {
 
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/60 text-sm text-center md:text-left">
+          <div className="flex justify-center items-center">
+            <p className="text-white/60 text-sm text-center">
               © {currentYear} Sticobytes Digital Agency. All rights reserved.
             </p>
-            <div className="flex gap-6 text-sm">
-              <Link
-                to="/privacy"
-                className="text-white/60 hover:text-primary-300 transition-colors duration-200"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                className="text-white/60 hover:text-primary-300 transition-colors duration-200"
-              >
-                Terms of Service
-              </Link>
-            </div>
           </div>
         </div>
       </div>

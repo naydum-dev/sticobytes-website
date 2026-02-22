@@ -73,7 +73,7 @@ function Contact() {
         </svg>
       ),
       label: "Location",
-      value: "Ezenobizi Umuopara, Umuahia, Abia State, Nigeria",
+      value: "Umuahia, Abia State, Nigeria",
     },
     {
       icon: (
@@ -102,7 +102,7 @@ function Contact() {
         </svg>
       ),
       label: "Email",
-      value: "hello@sticobytes.com",
+      value: "info@sticobytes.com",
       href: "mailto:hello@sticobytes.com",
     },
   ];

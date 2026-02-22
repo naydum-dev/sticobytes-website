@@ -3,10 +3,10 @@ import { Helmet } from "react-helmet-async";
 import Hero from "../components/sections/Hero";
 import LatestBlogs from "../components/sections/LatestBlogs";
 import Newsletter from "../components/sections/Newsletter";
-import Testimonials from "../components/sections/Testimonials";
 import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import Badge from "../components/common/Badge";
+import { FaRocket } from "react-icons/fa";
 
 const Home = () => {
   return (
@@ -318,7 +318,9 @@ const Home = () => {
             {/* Right - Image Placeholder */}
             <Card variant="gradient" className="p-12">
               <div className="text-center">
-                <div className="text-6xl mb-6">🚀</div>
+                <div className="flex justify-center mb-6">
+                  <FaRocket className="text-6xl text-white" />
+                </div>
                 <h3 className="text-2xl font-heading font-bold mb-4">
                   Ready to Get Started?
                 </h3>
@@ -341,9 +343,6 @@ const Home = () => {
 
       {/* Latest Blogs Section */}
       <LatestBlogs />
-
-      {/* Testimonials Section */}
-      <Testimonials />
 
       {/* Newsletter Section */}
       <Newsletter />

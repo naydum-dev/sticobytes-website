@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { FaSeedling } from "react-icons/fa";
 
 function About() {
   return (
@@ -68,7 +69,9 @@ function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left - Story Card */}
             <div className="bg-gradient-to-br from-navy-600 to-primary-600 rounded-3xl p-10 text-white">
-              <div className="text-6xl mb-6">🌱</div>
+              <div className="flex justify-start mb-6">
+                <FaSeedling className="text-6xl text-primary-300" />
+              </div>
               <h2 className="text-3xl font-bold font-heading mb-4">
                 Born From a Bold Question
               </h2>

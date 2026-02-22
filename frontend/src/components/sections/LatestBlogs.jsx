@@ -1,47 +1,28 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import BlogCard from "../blog/BlogCard";
 import Button from "../common/Button";
 import Badge from "../common/Badge";
+import { getAllPosts } from "../../services/blogApi.js";
 
 const LatestBlogs = () => {
-  const blogPosts = [
-    {
-      id: 1,
-      slug: "getting-started-with-react",
-      title: "Getting Started with React: A Beginner's Guide",
-      excerpt:
-        "Learn the fundamentals of React and build your first component. This comprehensive guide covers everything from setup to deployment.",
-      featured_image: null,
-      category_name: "Web Development",
-      published_at: "2026-02-01",
-      reading_time: 8,
-      views: 0,
-    },
-    {
-      id: 2,
-      slug: "mastering-tailwind-css",
-      title: "Mastering Tailwind CSS: Tips and Tricks",
-      excerpt:
-        "Discover advanced Tailwind CSS techniques to speed up your development workflow and create beautiful, responsive designs.",
-      featured_image: null,
-      category_name: "Design",
-      published_at: "2026-01-28",
-      reading_time: 6,
-      views: 0,
-    },
-    {
-      id: 3,
-      slug: "building-scalable-nodejs-apis",
-      title: "Building Scalable Node.js APIs",
-      excerpt:
-        "A deep dive into creating robust and scalable REST APIs using Node.js, Express, and PostgreSQL for enterprise applications.",
-      featured_image: null,
-      category_name: "Backend",
-      published_at: "2026-01-25",
-      reading_time: 10,
-      views: 0,
-    },
-  ];
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLatestPosts = async () => {
+      try {
+        const response = await getAllPosts({ limit: 3, page: 1 });
+        setBlogPosts(response.data || []);
+      } catch (error) {
+        console.error("Error fetching latest posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLatestPosts();
+  }, []);
 
   return (
     <section className="py-20 px-4 bg-white">
@@ -59,11 +40,22 @@ const LatestBlogs = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {blogPosts.map((post) => (
-            <BlogCard key={post.id} post={post} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="bg-gray-100 rounded-2xl h-80 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {blogPosts.map((post) => (
+              <BlogCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
 
         <div className="text-center">
           <Link to="/blog">
