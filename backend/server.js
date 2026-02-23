@@ -12,6 +12,7 @@ import serviceRoutes from "./routes/serviceRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
+import sitemapRoutes from "./routes/sitemapRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
@@ -166,6 +167,9 @@ app.use("/api/upload", uploadRoutes);
 
 //Newsletter Routes
 app.use("/api/newsletter", newsletterRoutes);
+
+// Sitemap route
+app.use("/", sitemapRoutes);
 
 // ============================================
 // ERROR HANDLING MIDDLEWARE
