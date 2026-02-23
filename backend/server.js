@@ -45,7 +45,12 @@ app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
 // 4. CORS - allow frontend to communicate with backend
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://sticobytes-website.vercel.app",
+      "https://sticobytes.com",
+      "https://www.sticobytes.com",
+    ],
     credentials: true,
   }),
 );
