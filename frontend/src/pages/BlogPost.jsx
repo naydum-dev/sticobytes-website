@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import Newsletter from "../components/sections/Newsletter";
 import {
   getPostBySlug,
   getRelatedPosts,
@@ -577,6 +578,9 @@ function BlogPost() {
           </section>
         </div>
       </div>
+
+      {/* Newsletter Section */}
+      <Newsletter />
     </>
   );
 }
