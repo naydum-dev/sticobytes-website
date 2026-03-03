@@ -48,6 +48,12 @@ function Navbar() {
               Services
             </Link>
             <Link
+              to="/courses"
+              className="text-gray-700 hover:text-primary-600 transition-colors"
+            >
+              Courses
+            </Link>
+            <Link
               to="/blog"
               className="text-gray-700 hover:text-primary-600 transition-colors"
             >
@@ -123,6 +129,13 @@ function Navbar() {
               onClick={toggleMenu}
             >
               Services
+            </Link>
+            <Link
+              to="/courses"
+              className="block px-3 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded transition-colors"
+              onClick={toggleMenu}
+            >
+              Courses
             </Link>
             <Link
               to="/blog"

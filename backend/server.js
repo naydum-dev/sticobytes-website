@@ -14,6 +14,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
 import sitemapRoutes from "./routes/sitemapRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
+import courseRoutes from "./routes/courseRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -170,6 +171,9 @@ app.use("/api/newsletter", newsletterRoutes);
 
 // Sitemap route
 app.use("/", sitemapRoutes);
+
+// Course Routes
+app.use("/api/courses", courseRoutes);
 
 // ============================================
 // ERROR HANDLING MIDDLEWARE

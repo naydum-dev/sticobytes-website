@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
+import Courses from "./pages/Courses";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Gadgets from "./pages/Gadgets";
@@ -28,6 +29,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="services" element={<Services />} />
+          <Route path="/courses" element={<Courses />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:slug" element={<BlogPost />} />
           <Route path="gadgets" element={<Gadgets />} />
