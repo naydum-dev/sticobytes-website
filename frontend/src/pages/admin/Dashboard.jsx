@@ -16,6 +16,9 @@ const Dashboard = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [showSubscribers, setShowSubscribers] = useState(false);
   const [subscribersLoading, setSubscribersLoading] = useState(false);
+  const [registrations, setRegistrations] = useState([]);
+  const [showRegistrations, setShowRegistrations] = useState(false);
+  const [registrationsLoading, setRegistrationsLoading] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     published: 0,
@@ -76,6 +79,21 @@ const Dashboard = () => {
       fetchPosts();
     } catch (err) {
       setError("Failed to delete post");
+    }
+  };
+
+  const fetchRegistrations = async () => {
+    setRegistrationsLoading(true);
+    setShowRegistrations(true);
+    try {
+      const response = await axios.get(`${API_URL}/courses/registrations`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRegistrations(response.data.data);
+    } catch (error) {
+      console.error("Failed to fetch registrations:", error);
+    } finally {
+      setRegistrationsLoading(false);
     }
   };
 
@@ -419,6 +437,157 @@ const Dashboard = () => {
                     </tr>
                   </tfoot>
                 </table>
+              )}
+            </div>
+          )}
+        </div>
+        {/* Course Registrations */}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-gray-900">
+              Course Registrations
+            </h2>
+            <button
+              onClick={fetchRegistrations}
+              className="px-4 py-2 rounded-lg text-white text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#009ad9" }}
+            >
+              {showRegistrations ? "Refresh" : "View Registrations"}
+            </button>
+          </div>
+
+          {showRegistrations && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              {registrationsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div
+                    className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+                    style={{
+                      borderColor: "#009ad9",
+                      borderTopColor: "transparent",
+                    }}
+                  ></div>
+                </div>
+              ) : registrations.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-4xl mb-3">🎓</p>
+                  <p className="text-gray-500">No registrations yet</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b border-gray-100">
+                      <tr>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Reg. Number
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Full Name
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Course
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Phone
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Mode
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Payment
+                        </th>
+                        <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {registrations.map((reg) => (
+                        <tr key={reg.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 text-sm font-bold text-primary-600">
+                            {reg.registration_number}
+                          </td>
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-medium text-gray-900">
+                              {reg.full_name}
+                            </p>
+                            <p className="text-xs text-gray-400">{reg.email}</p>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {reg.course_name}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {reg.phone}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {reg.location}
+                          </td>
+                          <td className="px-6 py-4">
+                            <select
+                              value={reg.payment_status}
+                              onChange={async (e) => {
+                                try {
+                                  await axios.put(
+                                    `${API_URL}/courses/registrations/${reg.id}`,
+                                    { payment_status: e.target.value },
+                                    {
+                                      headers: {
+                                        Authorization: `Bearer ${token}`,
+                                      },
+                                    },
+                                  );
+                                  setRegistrations(
+                                    registrations.map((r) =>
+                                      r.id === reg.id
+                                        ? {
+                                            ...r,
+                                            payment_status: e.target.value,
+                                          }
+                                        : r,
+                                    ),
+                                  );
+                                } catch (error) {
+                                  console.error(
+                                    "Failed to update payment status:",
+                                    error,
+                                  );
+                                }
+                              }}
+                              className={`px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer ${
+                                reg.payment_status === "confirmed"
+                                  ? "bg-green-100 text-green-700"
+                                  : reg.payment_status === "pending"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : "bg-red-100 text-red-700"
+                              }`}
+                            >
+                              <option value="pending">pending</option>
+                              <option value="confirmed">confirmed</option>
+                              <option value="cancelled">cancelled</option>
+                            </select>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-500">
+                            {formatDate(reg.registered_at)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot className="bg-gray-50 border-t border-gray-100">
+                      <tr>
+                        <td
+                          colSpan="7"
+                          className="px-6 py-3 text-sm text-gray-500"
+                        >
+                          Total:{" "}
+                          <span className="font-semibold text-gray-900">
+                            {registrations.length}
+                          </span>{" "}
+                          registrations
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
               )}
             </div>
           )}
