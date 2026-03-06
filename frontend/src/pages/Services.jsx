@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { getAllServices, createWhatsAppLink } from "../services/serviceApi";
-import Button from "../components/common/Button";
-import Card from "../components/common/Card";
-import Badge from "../components/common/Badge";
 
-// Icon components for each service
+// Service Icons
 const ServiceIcons = {
-  code: () => (
+  Development: () => (
     <svg
-      className="w-8 h-8"
+      className="w-7 h-7"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -22,9 +19,9 @@ const ServiceIcons = {
       />
     </svg>
   ),
-  palette: () => (
+  Design: () => (
     <svg
-      className="w-8 h-8"
+      className="w-7 h-7"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -37,9 +34,9 @@ const ServiceIcons = {
       />
     </svg>
   ),
-  briefcase: () => (
+  Branding: () => (
     <svg
-      className="w-8 h-8"
+      className="w-7 h-7"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -48,13 +45,13 @@ const ServiceIcons = {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
       />
     </svg>
   ),
-  "academic-cap": () => (
+  Marketing: () => (
     <svg
-      className="w-8 h-8"
+      className="w-7 h-7"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -63,90 +60,61 @@ const ServiceIcons = {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M12 14l9-5-9-5-9 5 9 5z"
+        d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
       />
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-      />
-    </svg>
-  ),
-  "computer-desktop": () => (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-      />
-    </svg>
-  ),
-  "desktop-computer": () => (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-      />
-    </svg>
-  ),
-  "code-bracket": () => (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
-      />
-    </svg>
-  ),
-  "circle-stack": () => (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"
+        d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
       />
     </svg>
   ),
 };
 
-// WhatsApp Icon Component
+const categoryColors = {
+  Development: {
+    bg: "bg-blue-50",
+    text: "text-blue-600",
+    border: "border-blue-100",
+    icon: "bg-blue-100 text-blue-600",
+    badge: "bg-blue-100 text-blue-700",
+  },
+  Design: {
+    bg: "bg-purple-50",
+    text: "text-purple-600",
+    border: "border-purple-100",
+    icon: "bg-purple-100 text-purple-600",
+    badge: "bg-purple-100 text-purple-700",
+  },
+  Branding: {
+    bg: "bg-amber-50",
+    text: "text-amber-600",
+    border: "border-amber-100",
+    icon: "bg-amber-100 text-amber-600",
+    badge: "bg-amber-100 text-amber-700",
+  },
+  Marketing: {
+    bg: "bg-green-50",
+    text: "text-green-600",
+    border: "border-green-100",
+    icon: "bg-green-100 text-green-600",
+    badge: "bg-green-100 text-green-700",
+  },
+};
+
 const WhatsAppIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
   </svg>
 );
+
+const stats = [
+  { value: "50+", label: "Projects Delivered" },
+  { value: "100%", label: "Client Satisfaction" },
+  { value: "3+", label: "Years Experience" },
+  { value: "24/7", label: "Support Available" },
+];
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -172,19 +140,19 @@ const Services = () => {
     }
   };
 
-  const categories = [
-    "All",
-    ...new Set(services.map((service) => service.category)),
-  ];
+  const categories = ["All", ...new Set(services.map((s) => s.category))];
 
   const filteredServices =
     selectedCategory === "All"
       ? services
-      : services.filter((service) => service.category === selectedCategory);
+      : services.filter((s) => s.category === selectedCategory);
 
-  const getIcon = (iconName) => {
-    const IconComponent = ServiceIcons[iconName] || ServiceIcons.code;
-    return <IconComponent />;
+  const getColors = (category) =>
+    categoryColors[category] || categoryColors.Development;
+
+  const getIcon = (category) => {
+    const Icon = ServiceIcons[category] || ServiceIcons.Development;
+    return <Icon />;
   };
 
   return (
@@ -193,283 +161,370 @@ const Services = () => {
         <title>Our Services | Sticobytes Digital Agency Umuahia, Nigeria</title>
         <meta
           name="description"
-          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Abia State, Nigeria."
+          content="Explore Sticobytes professional digital services including web development, graphics design, business branding, social media management and SEO optimization in Umuahia, Abia State, Nigeria."
         />
         <meta
           name="keywords"
-          content="web development Nigeria, graphics design Umuahia, business branding Abia State, React training Nigeria, SQL training, digital literacy, computer training Umuahia"
+          content="web development Nigeria, graphics design Umuahia, business branding Abia State, social media management Nigeria, SEO optimization Umuahia"
         />
         <link rel="canonical" href="https://sticobytes.com/services" />
-
-        {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Our Services | Sticobytes Digital Agency Umuahia, Nigeria"
+          content="Our Services | Sticobytes Digital Agency"
         />
         <meta
           property="og:description"
-          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Nigeria."
+          content="Professional digital services for businesses in Nigeria."
         />
         <meta property="og:url" content="https://sticobytes.com/services" />
-        <meta property="og:site_name" content="Sticobytes" />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Our Services | Sticobytes Digital Agency Umuahia, Nigeria"
-        />
-        <meta
-          name="twitter:description"
-          content="Explore Sticobytes services including web development, graphics design, business branding, digital literacy, React training, SQL training, and computer training in Umuahia, Nigeria."
-        />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-navy-600 to-primary-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <Badge variant="secondary" className="mb-4">
-              Our Services
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
-              Digital Solutions for Your Business
-            </h1>
-            <p className="text-xl text-white/90">
-              From web development to digital training, we provide comprehensive
-              services to help your business thrive in the digital world.
-            </p>
-          </div>
+      {/* HERO */}
+      <section className="bg-navy-900 text-white py-20 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary-500/10"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary-500/5"></div>
         </div>
-      </section>
 
-      {/* Category Filter */}
-      <section className="bg-white border-b sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "primary" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="inline-block bg-primary-500/20 border border-primary-400/30 text-primary-300 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">
+              What We Offer
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-bold font-heading mb-6 leading-tight">
+              Professional Digital Services
+              <span className="text-primary-400"> for Your Business</span>
+            </h1>
+            <p className="text-lg text-white/70 mb-10">
+              From building your website to growing your brand online — we
+              deliver results that move your business forward.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href={`https://wa.me/2348113393564?text=${encodeURIComponent("Hi Sticobytes! I would like to book a free consultation.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-colors"
               >
-                {category}
-              </Button>
+                <WhatsAppIcon />
+                Book Free Consultation
+              </a>
+              <a
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors"
+              >
+                Get a Quote
+              </a>
+            </div>
+          </div>
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-16 max-w-3xl mx-auto">
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-3xl font-bold text-primary-400">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-white/50 mt-1">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* CATEGORY FILTER */}
+      <section className="bg-white border-b sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+                  selectedCategory === category
+                    ? "bg-navy-800 text-white shadow-sm"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES GRID */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Loading State */}
           {loading && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-              <p className="mt-4 text-gray-600">Loading services...</p>
+            <div className="flex items-center justify-center py-20">
+              <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
 
-          {/* Error State */}
           {error && (
             <div className="text-center py-12">
-              <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                <p className="text-red-600">{error}</p>
-                <Button
-                  variant="primary"
-                  className="mt-4"
+              <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md mx-auto">
+                <p className="text-red-600 mb-4">{error}</p>
+                <button
                   onClick={fetchServices}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                 >
                   Try Again
-                </Button>
+                </button>
               </div>
             </div>
           )}
 
-          {/* Services Grid */}
           {!loading && !error && (
-            <>
-              {filteredServices.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-600">
-                    No services found in this category.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredServices.map((service) => (
-                    <Card
-                      key={service.id}
-                      variant="bordered"
-                      hover
-                      className="flex flex-col h-full"
-                    >
-                      {/* Service Icon */}
-                      <div className="mb-6">
-                        <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600">
-                          {getIcon(service.icon)}
-                        </div>
-                      </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredServices.map((service) => {
+                const colors = getColors(service.category);
+                return (
+                  <div
+                    key={service.id}
+                    className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                  >
+                    {/* Card Top Bar */}
+                    <div
+                      className={`h-1.5 w-full ${colors.text.replace("text", "bg")}`}
+                    ></div>
 
-                      {/* Service Header */}
-                      <div className="mb-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-xl font-bold font-heading text-navy-700">
-                            {service.title}
-                          </h3>
-                          {service.is_featured && (
-                            <Badge variant="primary" size="sm">
-                              Popular
-                            </Badge>
-                          )}
+                    <div className="p-7 flex flex-col flex-1">
+                      {/* Icon + Category */}
+                      <div className="flex items-center justify-between mb-5">
+                        <div
+                          className={`w-14 h-14 rounded-xl flex items-center justify-center ${colors.icon}`}
+                        >
+                          {getIcon(service.category)}
                         </div>
-                        <Badge variant="default" size="sm">
+                        <span
+                          className={`text-xs font-semibold px-3 py-1 rounded-full ${colors.badge}`}
+                        >
                           {service.category}
-                        </Badge>
+                        </span>
                       </div>
 
-                      {/* Service Description */}
-                      <p className="text-gray-600 mb-6 flex-grow">
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-navy-800 font-heading mb-3">
+                        {service.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-gray-500 text-sm leading-relaxed mb-5">
                         {service.description}
                       </p>
 
-                      {/* Service Features */}
+                      {/* Features */}
                       {service.features && service.features.length > 0 && (
-                        <div className="mb-6">
-                          <h4 className="text-sm font-semibold text-navy-700 mb-2">
-                            What's Included:
-                          </h4>
-                          <ul className="space-y-1">
+                        <div className="mb-6 flex-1">
+                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+                            What is Included
+                          </p>
+                          <ul className="space-y-2">
                             {service.features
-                              .slice(0, 4)
+                              .slice(0, 5)
                               .map((feature, index) => (
                                 <li
                                   key={index}
-                                  className="flex items-start text-sm text-gray-600"
+                                  className="flex items-center gap-2 text-sm text-gray-600"
                                 >
-                                  <svg
-                                    className="w-5 h-5 text-primary-600 mr-2 flex-shrink-0"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
+                                  <span
+                                    className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 text-xs ${colors.icon}`}
                                   >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
+                                    ✓
+                                  </span>
                                   {feature}
                                 </li>
                               ))}
-                            {service.features.length > 4 && (
-                              <li className="text-sm text-primary-600 font-medium ml-7">
-                                +{service.features.length - 4} more
+                            {service.features.length > 5 && (
+                              <li
+                                className={`text-xs font-semibold ml-6 ${colors.text}`}
+                              >
+                                +{service.features.length - 5} more included
                               </li>
                             )}
                           </ul>
                         </div>
                       )}
 
-                      {/* Service Meta */}
-                      <div className="space-y-2 mb-6 pt-4 border-t">
-                        {service.price_range && (
-                          <div className="flex items-center text-sm">
-                            <svg
-                              className="w-5 h-5 text-gray-400 mr-2"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            <span className="font-semibold text-navy-700">
-                              {service.price_range}
-                            </span>
+                      {/* Price + Duration */}
+                      <div
+                        className={`rounded-xl p-4 mb-5 ${colors.bg} border ${colors.border}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
+                              Starting From
+                            </p>
+                            <p className={`text-lg font-bold ${colors.text}`}>
+                              {service.price_range || "Contact for pricing"}
+                            </p>
                           </div>
-                        )}
-                        {service.duration && (
-                          <div className="flex items-center text-sm text-gray-600">
-                            <svg
-                              className="w-5 h-5 text-gray-400 mr-2"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            {service.duration}
-                          </div>
-                        )}
+                          {service.duration && (
+                            <div className="text-right">
+                              <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
+                                Timeline
+                              </p>
+                              <p className="text-sm font-semibold text-gray-700">
+                                {service.duration}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
 
-                      {/* WhatsApp Button */}
-                      <Button
-                        variant="primary"
-                        fullWidth
-                        icon={WhatsAppIcon}
-                        onClick={() => {
-                          const whatsappLink = createWhatsAppLink(
-                            service.whatsapp_message,
-                          );
-                          window.open(whatsappLink, "_blank");
-                        }}
-                      >
-                        Get Started
-                      </Button>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </>
+                      {/* CTA Buttons */}
+                      <div className="flex gap-3">
+                        <a
+                          href={`https://wa.me/2348113393564?text=${encodeURIComponent(service.whatsapp_message || `Hi Sticobytes! I am interested in your ${service.title} service.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-500 text-white text-sm font-semibold rounded-xl hover:bg-green-600 transition-colors"
+                        >
+                          <WhatsAppIcon />
+                          WhatsApp
+                        </a>
+                        <a
+                          href="/contact"
+                          className="flex-1 flex items-center justify-center py-3 bg-navy-800 text-white text-sm font-semibold rounded-xl hover:bg-primary-600 transition-colors"
+                        >
+                          Get Quote
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-navy-600 text-white py-16">
+      {/* FREE CONSULTATION SECTION */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-navy-900 rounded-3xl overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              {/* Left */}
+              <div className="p-10 lg:p-14">
+                <span className="inline-block bg-primary-500/20 text-primary-300 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-6">
+                  Free Offer
+                </span>
+                <h2 className="text-3xl font-bold text-white font-heading mb-4">
+                  Book a Free
+                  <span className="text-primary-400"> 30-Minute</span>{" "}
+                  Consultation
+                </h2>
+                <p className="text-white/60 mb-8">
+                  Not sure where to start? Let us talk about your business goals
+                  and show you exactly how we can help — completely free, no
+                  strings attached.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {[
+                    "Discuss your project goals",
+                    "Get expert advice and recommendations",
+                    "Receive a custom price estimate",
+                    "No commitment required",
+                  ].map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center gap-3 text-sm text-white/70"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs flex-shrink-0">
+                        ✓
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={`https://wa.me/2348113393564?text=${encodeURIComponent("Hi Sticobytes! I would like to book a free 30-minute consultation to discuss my project.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-colors"
+                >
+                  <WhatsAppIcon />
+                  Book Free Consultation
+                </a>
+              </div>
+
+              {/* Right */}
+              <div className="bg-navy-800 p-10 lg:p-14 flex flex-col justify-center">
+                <h3 className="text-xl font-bold text-white mb-6">
+                  Why Choose Sticobytes?
+                </h3>
+                <div className="space-y-5">
+                  {[
+                    {
+                      icon: "🏆",
+                      title: "Certified Professionals",
+                      desc: "Certiport Certified & Nigeria Computer Professionals Level 3",
+                    },
+                    {
+                      icon: "📍",
+                      title: "Based in Umuahia",
+                      desc: "Local agency that understands the Nigerian market",
+                    },
+                    {
+                      icon: "⚡",
+                      title: "Fast Delivery",
+                      desc: "We meet deadlines and deliver quality on time",
+                    },
+                    {
+                      icon: "🤝",
+                      title: "Ongoing Support",
+                      desc: "We don't disappear after delivery — we stay with you",
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-start gap-4">
+                      <span className="text-2xl">{item.icon}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-white">
+                          {item.title}
+                        </p>
+                        <p className="text-xs text-white/50 mt-0.5">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BOTTOM CTA */}
+      <section className="bg-primary-600 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Ready to Get Started?
+          <h2 className="text-3xl font-bold text-white font-heading mb-4">
+            Ready to Take Your Business Digital?
           </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Contact us today to discuss your project and see how we can help
-            your business succeed.
+          <p className="text-white/80 text-lg mb-8">
+            Join businesses in Umuahia and across Nigeria that trust Sticobytes
+            to deliver outstanding digital results.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="light"
-              size="lg"
-              onClick={() => {
-                const message =
-                  "Hello Sticobytes! I'd like to discuss a project with you.";
-                const whatsappLink = createWhatsAppLink(message);
-                window.open(whatsappLink, "_blank");
-              }}
-              icon={WhatsAppIcon}
+            <a
+              href={`https://wa.me/2348113393564?text=${encodeURIComponent("Hi Sticobytes! I am ready to get started. I would like to discuss my project.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-600 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
             >
+              <WhatsAppIcon />
               Chat on WhatsApp
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white text-white hover:bg-white hover:text-navy-600"
-              onClick={() => (window.location.href = "/contact")}
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-primary-600 transition-colors"
             >
-              Contact Us
-            </Button>
+              Send us a Message
+            </a>
           </div>
         </div>
       </section>
